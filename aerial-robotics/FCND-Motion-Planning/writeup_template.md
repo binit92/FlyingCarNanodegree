@@ -62,29 +62,31 @@ I have read first line in colliders.csv to read latitude and longitude. then I a
 Here as long as you successfully determine your local position relative to global home you'll be all set. Explain briefly how you accomplished this in your code.
 
 
-To successfully determine local postion relative to global home, I have used *global_to_local* method
+To successfully determine local postion relative to global home, I have used *global_to_local* method. It converts global geodetic (longitude,latitude, altitude) to UTM
+(easting, northing, zone number , zone letter) and then to local NED (north, east , down)
 
 
 #### 3. Set grid start position from local position
 This is another step in adding flexibility to the start location. As long as it works you're good to go!
 
-I have set the local position for grid_start
+I have set the local position for grid_start. I am randomizing the local postion value using numpy's rint method.
 
 
 #### 4. Set grid goal position from geodetic coords
 This step is to add flexibility to the desired goal location. Should be able to choose any (lat, lon) within the map and have it rendered to a goal location on the grid.
 
-grid goal is flexible and can be changed during development
+Similar to grid start, I have taken one random coording and then randomizing the goal position using numpy's rint method.
 
 #### 5. Modify A* to include diagonal motion (or replace A* altogether)
 Minimal requirement here is to modify the code in planning_utils() to update the A* implementation to include diagonal motions on the grid that have a cost of sqrt(2), but more creative solutions are welcome. Explain the code you used to accomplish this step.
 
 
-I have added  diagonal motion in Agent Class 
+I have added  diagonal motion in Action Class by adding new diagonal actions. I am using np.sqrt(2) method to assign cost to diagonal motion. Also, I have updated the valid_actions check for it 
+
 #### 6. Cull waypoints 
 For this step you can use a collinearity test or ray tracing method like Bresenham. The idea is simply to prune your path of unnecessary waypoints. Explain the code you used to accomplish this step.
 
-
+I am using collinearty check to prune path so that it doesn't move zone by zone if not required. If colineary checks passes, it remove the subpoints between two points.
 
 ### Execute the flight
 #### 1. Does it work?
