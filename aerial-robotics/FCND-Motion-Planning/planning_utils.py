@@ -184,3 +184,6 @@ def collinearity_check(p1, p2, p3, epsilon=1e-6):
     m = np.concatenate((p1, p2, p3), 0)
     det = np.linalg.det(m)
     return abs(det) < epsilon    
+
+# pointers for Bresenham's method 
+# http://www.roguebasin.com/index.php?title=Bresenham%27s_Line_Algorithm 

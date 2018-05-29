@@ -163,7 +163,9 @@ class MotionPlanning(Drone):
         
         goal_local_north, goal_local_east, _ = global_to_local((goal_lon, goal_lat, 0), self.global_home)
         grid_goal = (int(np.rint(goal_local_north)) - north_offset, int(np.rint(goal_local_east)) - east_offset)
-     
+        
+        #check this!
+        #grid_goal = (750,370)
         
 
         # TODO: adapt to set goal as latitude / longitude position and convert
