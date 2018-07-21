@@ -30,5 +30,5 @@ if (os.path.exists(gps_file)):
 	print("Standard Deviation for GPS", Calculate(gps_file));
 	
 if (os.path.exists(acc_file)):
-	print("Standard Deviation for GPS", Calculate(acc_file));
+	print("Standard Deviation for Accelerometer", Calculate(acc_file));
 	
