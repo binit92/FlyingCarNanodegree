@@ -26,18 +26,19 @@ Write up that includes all the rubric points
 
    
 
-2.  Implement a better rate gyro attitude integration scheme in the `updateFromIMU()` function.
+2. Implement a better rate gyro attitude integration scheme in the `updateFromIMU()` function.
 
-   Running `config/07_AttitudeEstimation.txt`, the only sensor used is the IMU and noise levels are set to 0. On running this. 
+   + Use FromEuler123_RPY function to create a quaternion from the current euler angle estimate
+   + Do Integrated the body rate into the quaternion.
+   + Convert back quaternion to euler angle. 
 
-   + the top graph is showing errors in each of the estimated Euler angles 
+3. Implement all of the elements of the prediction step for the estimator.
 
-   + the bottom shows the true Euler angles and the estimates. There's quite a bit of error in attitude estimation.
+   + Add 08_PredictState.txt scenerio at first to predict the state on acceleration measurement. It shows that estimated state doesn't follow the true state 
+   + Implement the state prediction step in Predict State function. The estimator state is able to track the actual state with required slow drift. Gif is included inside /image/binit/
+   + On running 09_PredictCovariance.txt scenerio, the estimated covariance is not capturing the increasing errors.
+   + Implement partial derivative of the body to global rotation matrix in GetRbgPrime function. The RbgPrime is used calculate Jacobian matrix in predict method. After this the estimated covariance grows with errors. 
 
-   Changes are `QuadEstimatorEKF.cpp :: UpdateFromIMU()`. To reduce the errors in the estimated attitude (Euler Angels) with 0.1 rad, I have implemented a better rate gyro attitude integration schme t​     
+4. Implement the magnetometer updatee 
 
-3.  Implement all of the elements of the prediction step for the estimator.
-
-4.  Implement the magnetometer update
-
-5.  Implement the GPS update.
+5. Implement the GPS update.

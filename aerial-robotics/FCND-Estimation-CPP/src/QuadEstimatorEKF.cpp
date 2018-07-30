@@ -174,7 +174,15 @@ VectorXf QuadEstimatorEKF::PredictState(VectorXf curState, float dt, V3F accel, 
   Quaternion<float> attitude = Quaternion<float>::FromEuler123_RPY(rollEst, pitchEst, curState(6));
 
   ////////////////////////////// BEGIN STUDENT CODE ///////////////////////////
+  predictedState(0) = curState(0) + curState(3) * dt;
+  predictedState(1) = curState(1) + curState(4) * dt;
+  predictedState(2) = curState(2) + curState(5) * dt;
 
+  V3F accelW = attitude.Rotate_BtoI(accel);
+
+  predictedState[3] = curState(3) + accelW.x * dt;
+  predictedState[4] = curState(4) + accelW.y * dt;
+  predictedState[5] = curState(5) + accelW.z * dt - CONST_GRAVITY * dt;
 
   /////////////////////////////// END STUDENT CODE ////////////////////////////
 
@@ -201,8 +209,24 @@ MatrixXf QuadEstimatorEKF::GetRbgPrime(float roll, float pitch, float yaw)
   //   that your calculations are reasonable
 
   ////////////////////////////// BEGIN STUDENT CODE ///////////////////////////
+  float cosPhi = cosf(roll);
+  float sinPhi = sinf(roll);
 
+  float cosTheta = cosf(pitch);
+  float sinTheta = sinf(pitch);
 
+  float cosPsi = cosf(yaw);
+  float sinPsi = sinf(yaw);
+
+  float a = -cosTheta * sinPsi;
+  float b = -sinPhi * sinTheta * sinPsi -cosTheta * cosPsi;
+  float c = -cosPhi * sinTheta * sinPsi - sinPhi * cosPsi;
+
+  float x = cosTheta * cosPsi;
+  float y = sinPhi * sinTheta * cosPsi - cosPhi * sinPsi;
+  float z = cosPhi * sinTheta * cosPsi + sinPhi * sinPsi;
+  
+  RbgPrime << a, b, c, x, y, z, 0, 0, 0;
   /////////////////////////////// END STUDENT CODE ////////////////////////////
 
   return RbgPrime;
