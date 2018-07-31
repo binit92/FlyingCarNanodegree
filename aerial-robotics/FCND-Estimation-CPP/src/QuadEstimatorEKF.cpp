@@ -256,7 +256,6 @@ void QuadEstimatorEKF::Predict(float dt, V3F accel, V3F gyro)
   //
   // - the transition model covariance, Q, is loaded up from a parameter file in member variable Q
   // 
-  // - This is unfortunately a messy step. Try to split this up into clear, manageable steps:
   //   1) Calculate the necessary helper matrices, building up the transition jacobian
   //   2) Once all the matrices are there, write the equation to update cov.
   //
@@ -271,7 +270,14 @@ void QuadEstimatorEKF::Predict(float dt, V3F accel, V3F gyro)
   gPrime.setIdentity();
 
   ////////////////////////////// BEGIN STUDENT CODE ///////////////////////////
+  gPrime(0, 3) = dt;
+  gPrime(1, 4) = dt;
+  gPrime(2, 5) = dt;
+  gPrime(3, 6) = (RbgPrime(0) * accel).sum() * dt;
+  gPrime(4, 6) = (RbgPrime(1) * accel).sum() * dt;
+  gPrime(5, 6) - (RbgPrime(2) * accel).sum() * dt;
 
+  ekfCov = gPrime * ekfCov * gPrime.transpose() + Q;
 
   /////////////////////////////// END STUDENT CODE ////////////////////////////
 
@@ -297,6 +303,11 @@ void QuadEstimatorEKF::UpdateFromGPS(V3F pos, V3F vel)
   //  - this is a very simple update
   ////////////////////////////// BEGIN STUDENT CODE ///////////////////////////
 
+  for (int x = 0; x < QUAD_EKF_NUM_STATES - 1; x++) {
+	  hPrime(x, x) = 1;
+  }
+  zFromX = hPrime * ekfState;
+
   /////////////////////////////// END STUDENT CODE ////////////////////////////
 
   Update(z, hPrime, R_GPS, zFromX);
@@ -317,8 +328,17 @@ void QuadEstimatorEKF::UpdateFromMag(float magYaw)
   //    (you don't want to update your yaw the long way around the circle)
   //  - The magnetomer measurement covariance is available in member variable R_Mag
   ////////////////////////////// BEGIN STUDENT CODE ///////////////////////////
-
-
+  hPrime(0, 6) = 1;
+  zFromX(0) = ekfState(6);
+  float diff = z(0) - zFromX(0);
+  
+  // 
+  if (diff > F_PI) {
+	  zFromX(0) += 2.f*F_PI;
+  }
+  else if (diff < -F_PI) {
+	  zFromX(0) -= 2.f*F_PI;
+  }
   /////////////////////////////// END STUDENT CODE ////////////////////////////
 
   Update(z, hPrime, R_Mag, zFromX);

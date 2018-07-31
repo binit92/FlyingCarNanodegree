@@ -39,6 +39,14 @@ Write up that includes all the rubric points
    + On running 09_PredictCovariance.txt scenerio, the estimated covariance is not capturing the increasing errors.
    + Implement partial derivative of the body to global rotation matrix in GetRbgPrime function. The RbgPrime is used calculate Jacobian matrix in predict method. After this the estimated covariance grows with errors. 
 
-4. Implement the magnetometer updatee 
+4. Implement the magnetometer update
+
+   + On running 10_MagUpdate scenerio, I can see the estimate yaw and estimated standard deviation is increasing from the real value 
+   + Update the magnetometer update within UpdatefromMag function using equations from section 7.3.2 Magnetometer from [Estimation For Quadrotors](https://www.overleaf.com/read/vymfngphcccj#/54894644/) paper. Later Update method is called to do the state update and covariance update.  It is crucial to normalize the difference of measurement and estimated yaw before the magnetometer update.
+   + Now 10_MagUpdate scenerio, estimated standard deviation accurately captures the yaw error.
 
 5. Implement the GPS update.
+
+   + On running scenario 11_GPSUpdate with default code, we can see the watch the position and velocity error drifting away. They are using ideal estimator and ideal IMU. Drone goes wild if we use my estimated and the realistic IMU.
+   + Update the EKF GPS Update in the function update from gps with equations from section 7.3.1 GPS from the Estimation For Quadrotor paper. 
+   + After this change, we can see position error and sigma decreases in scenerio 11_GPSUpdate
