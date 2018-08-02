@@ -20,11 +20,11 @@ Write up that includes all the rubric points
      I have simply added a python script under */script/sensor_noise.py* to calculate standard deviation for GPS and Accelerometer. Calculate values are : 
 
    ```
-   GPS   : 0.6394973781911066
-   Accel : 0.6394973781911066
+   GPS   : 0.6964075466374975
+   Accel : 0.47488011936473634
    ```
 
-   
+   Screen shot is attached in images/binit/06_sensor_noise.png
 
 2. Implement a better rate gyro attitude integration scheme in the `updateFromIMU()` function.
 

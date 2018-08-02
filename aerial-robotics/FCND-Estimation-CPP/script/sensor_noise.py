@@ -23,7 +23,9 @@ def Calculate(filename):
 	xarray = np.array(xlist,dtype=float)
 	#print(xarray)
 	mean = "xmean = {}".format(xarray.mean())
-	std = "xsted = {}".format(xarray.std())		
+	std = "xstd = {}".format(xarray.std())		
+	print(mean);
+	print(std);
 	return std
 
 if (os.path.exists(gps_file)):
